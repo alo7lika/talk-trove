@@ -136,8 +136,10 @@ Follow these steps to deploy the Chat-App to a production environment:
 
 ### 2. Configure Environment Variables 📋
 
-- Create a `.env` file in the backend directory.
-- Make sure to include the following variables:
+- In the `backend` directory, you will find a file named `.env.sample`. 
+- Rename this file to `.env`.
+- Update the variables as follows:
+
   
   ```plaintext
   MONGO_URI=your_mongodb_connection_string
@@ -169,21 +171,29 @@ Follow these steps to deploy the Chat-App to a production environment:
 ### 5. Deploying Client App 📱
 
 - Use a web server like **NGINX** or **Apache** to serve the frontend.
-- Copy the contents of the `build` folder to the web server's root directory.
+- If you don't have MongoDB set up, you can use Docker to run MongoDB easily. Follow these steps:
 
-- Configure the web server to handle client-side routing. For **NGINX**, use this example configuration:
+  1. **Install Docker** if it's not already installed on your system.
+  2. **Run MongoDB using Docker** with the following command:
 
-  ```nginx
-  server {
-      listen 80;
-      server_name your_domain_or_ip;
+     ```bash
+     docker run --name mongodb -d -p 27017:27017 mongo
+     ```
 
-      location / {
-          root /path_to_your_build_folder;
-          try_files $uri /index.html;
-      }
-  }
-  ```
+  3. **Verify that MongoDB is running**:
+
+     ```bash
+     docker ps
+     ```
+
+  4. Update your `.env` file to point to the MongoDB instance running in Docker:
+
+     ```plaintext
+     MONGO_URI=mongodb://localhost:27017/your_database_name
+     ```
+
+- After setting up MongoDB, continue with the following steps to build and serve the client app.
+  
 ### 6. Setting Up a Reverse Proxy 🌍
 
 To ensure both the frontend and backend are served properly, set up a reverse proxy (e.g., using **NGINX**) to direct traffic to the correct service.
